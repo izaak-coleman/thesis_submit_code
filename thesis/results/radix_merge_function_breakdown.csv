@@ -1,0 +1,69 @@
+8,bsatimer(), 0
+8,radixtimer(), 32
+8,maptimer(), 56
+8,merge(), 60
+8,constructTotalRadixSA(), 151
+
+// 16 k
+16, bsatimer(), 0
+16, radixtimer(), 68
+16, maptimer(), 114
+16, merge(), 125
+16, constructTotalRadixSA(), 319
+
+// 32k
+32,bsatimer(), 1
+32,radixtimer(), 137
+32,maptimer(), 255
+32,merge(), 272
+32,constructTotalRadixSA(), 680
+
+// 64
+64,bsatimer(), 2
+64,radixtimer(), 273
+64,maptimer(), 569
+64,merge(), 616
+64,constructTotalRadixSA(), 1471
+
+//128k
+128, bsatimer(), 4
+128, radixtimer(), 553
+128, maptimer(), 1357
+128, merge(), 1445
+128, constructTotalRadixSA(), 3370
+
+// 256k
+256, bsatimer(), 8
+256, radixtimer(), 1200
+256, maptimer(), 3445
+256, merge(), 3275
+256, constructTotalRadixSA(), 7963
+
+
+//  512
+512,bsatimer(), 15
+512,radixtimer(), 2629
+512,maptimer(), 8019
+512,merge(), 7399
+512,constructTotalRadixSA(), 18102
+
+// 1024
+1024, bsatimer(), 33
+1024, radixtimer(), 5483
+1024, maptimer(), 18672
+1024, merge(), 15599
+1024, constructTotalRadixSA(), 39853
+
+// 2048
+2048, satimer(), 45
+2048, radixtimer(), 11587
+2048, maptimer(), 42317
+2048, merge(), 33214
+2048, constructTotalRadixSA(), 88380
+
+// 4096
+4096, bsatimer(), 96
+4096, radixtimer(), 29544
+4096, maptimer(), 97296
+4096, merge(), 70295
+4096, constructTotalRadixSA(), 197552

@@ -1,0 +1,298 @@
+
+
+
+
+
+
+
+
+
+###################################################################################################################
+###################################################################################################################
+### This version of the source code is currently under development. Further improvements and optimizations   ######
+### are being implemented at the moment!                                                                     ######
+### Please download the last release from the oficial SMuFin website: http://cg.bsc.es/smufin/               ######
+###################################################################################################################
+###################################################################################################################
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
+///////////////////// TERMS AND CONDITIONS OF DOWNLOAD AND USE /////////////////////
+
+The use of any materials available for download in the present space/webpage ("Software" and/or "Database") shall be subject to the following conditions:
+
+    By downloading and/or using the Software and/or Database you agree to irrevocably accept the full terms of this license. DO not download the Software and/or Database unless this is the case.
+    Academic users can download, install and use the Software and/or Database for non-commercial purposes. Academic users may not use the Software and/or Database for profit of any kind, whether monetary or non-monetary and disregarding the concept under which the profit is obtained.
+    The license granted hereunder to academic users shall be a limited, non-exclusive, non-assignable right to use the Software and/or Database, without the right to sublicense, for non-commercial purposes. Such right may be revoked at any time at our discretion.
+    All rights except the limited license to use to the Software and/or Database shall remain vested with us as licensors, both of partial and/or full copies thereof, as well as any related documentation and/or information provided with the Software and/or Database.
+    You agree not to redistribute the Software and/or Database in any manner without our express written consent.
+    You are not allowed to engineer, reverse engineer, disassemble, decompile, translate, localize, reconstruct, transform or extract the Software or any portion thereof without our express written consent.
+    You are not allowed to implement any mechanisms or use or device any methods to decrypt the Software and/or Database or in any other way avoid or penetrate any security or confidentiality measures established to avoid open access to the Software and/or Database or any part thereof.
+    In the event that some part or all of the Software and/or Databases is subject to third-party licenses, the breach of the present terms and conditions may imply the violation of such third-party licenses and their intellectual and/or industrial property rights. If you are concerned and do not have the information available, please request the specification of any applicable third-party licenses to the point of contact through which you accessed the Software and/or Database and such information shall be made available to you gladly.
+    This Software and/or Database is provided to you "AS IS", without any support and/or error correction services and without warranty of any kind, including any warranty of fitness for a particular purpose, non-infringement of third-party rights, proper functionality and inexistence of files that could harm your computer and/or system. Specifically, the Software and/or Database is intended for educational and scientific research purposes only and it is not intended as a substitute for professional advice of any kind, including medical and/or clinical advice, legal advice, financial advice or in general, any other professional advice which is not made in writing with a specific reference excluding the application of this clause.
+    We shall have no liability of any kind for making the Software and/or Database available to you for download. In any jurisdictions in which such exclusion of liability may be against mandatory laws, the maximum liability shall be limited to ONE EURO (1.- €).
+    To the extent the Software and/or Database is in any way modified or transformed and/or any derivative works are generated there-from in violation of the present terms, all right title and interest to such amendments, transformations and derivative works shall pertain to us, and you agree to execute as many documents as necessary to effectively transfer to us any title in accordance with this condition.
+
+The Software and/or Database are protected by copyrights as well as by the applicable International Copyright Laws and Treaties and any infringement of the terms of this license may be prosecuted.
+
+////////////////////////////////////////////////////////////////////////////////////
+
+
+
+SMuFin User Guide
+
+SMuFin 0.9.3 MPI Beta
+----------------------
+
+http://cg.bsc.es/smufin
+Last update: 5 August 2014
+
+SMuFin identifies somatic variation in tumor genomes by directly comparing its sequence reads with those of a normal genome of th esame individual. 
+
+The last version of SMuFin executable and related source code can be accessed through our official website: http://cg.bsc.es/smufin/
+
+In order to build SMuFin from the source code, it is required to have the following tools and libraries installed:
+
+C/C++ Compiler (GCC >= 4.3.X)
+MPI Environment (OpenMPI >= 1.5.X)
+
+################## OpenMPI INFO ######################
+
+Before compiling, be sure PATH and LD_LIBRARY_PATH includes the "bin" and "lib" respectively from the OpenMPI installation dir.
+
+To build SMuFin you just need to run the following commands:
+
+$> tar zxvf smufin_mpi_0.9.3.tar.gz
+$> cd smufin_mpi_0.9.3
+$> make
+
+
+SYSTEM REQUIREMENTS:
+
+SMuFin MPI distributes the genomic load among different nodes of a cluster. Therefore a minimum number of computing nodes have to be first determined. For example, a human genome dataset of 30x sequencing coverage typically requires around 250GB RAM to be distributed among all defined MPI instances. An approximate estimate of the required number of nodes for each sample type can be obtained using the following formula:
+
+MT = Mt + Mn
+M(t or n) = L * C * 2.3
+N = MT / R
+
+where:
+
+	Mt = Memory necessary for the tumor genome
+	Mn = Memory necessary for the normal genome
+	MT = The total aproximate amount of memory required for a complete analysis of a tumor-normal pair
+	L = Genome length in Megabase pairs covered by the sequencing
+	C = Sequencing coverage
+	M(T, t or n) = Required RAM memory in MBytes
+	R = Memory available per user in each node (in MB)
+	N = Minimun number of computing nodes required
+
+For example, a complete analysis of tumor and normal pair with an approximate L of 3000 and sequenced at C = 30x each, would require, in a cluster machine with 32GB RAM per node, a minimum of N = (3000 * 30 * 2.3)*2 / 32000 ~ 13 computing nodes.
+
+Beyond these calculations, we recommend to use more nodes than the strict minimum estimates. 
+
+
+
+INPUT REQUIREMENTS:
+
+In order to run SMuFin the paths for the Tumor and Normal samples, as well as for the reference genome, must be specified. The reference genome must be in FASTA format, whereas the normal and tumor reads in FASTQ. Alternatively, we also provide the option of using BAM files as a source for the reads. Because raw sequences are extracted from BAM files, optimal results will be obtained if BAM files containing both, aligned and unaligned sequence reads are used. 
+
+
+
+RUNNING SMUFIN:
+
+Usage:   SMuFin <command> [options]
+
+command: --ref          <FILE>  Reference genome
+    The reference genome in fasta format.
+
+         --normal_bam          <FILE>  Use normal BAM file intead of FASTQ. SMuFin extracts read sequences directly from BAM file.
+         --tumor_bam           <FILE>  Use tumor BAM file intead of FASTQ. SMuFin extracts read sequences directly from BAM file.
+         --normal_fastq_1      <FILE>  Filename containing paths to normal fastq files corresponding to 1st mate.
+         --normal_fastq_2      <FILE>  Filename containing paths to normal fastq files corresponding to 2nd mate.
+         --tumor_fastq_1       <FILE>  Filename containing paths to tumor fastq files corresponding to 1st mate.
+         --tumor_fastq_2       <FILE>  Filename containing paths to tumor fastq files corresponding to 2on mate.
+         --tumor_cont_perc     <NUM>   Expected percentage of tumor contamination in normal dataset 0-100 <0>.
+         --min_sup_reads       <NUM>   The minimum number of tumor supporting reads required for calling a variant <default 4>.
+	 --cpus_per_node       <NUM>   Number of cpus to be used for each node.
+	 --patient_id	       <TEXT>  SMuFin will append TEXT to each of the outputed filenames: 
+						somatic_SNV.<TEXT>.txt, 
+						somatic_small_SVs.<TEXT>.txt, 
+						somatic_large_SVs.<TEXT>.txt
+
+
+EXAMPLE DATASET:
+
+Before using SMUFIN for production, we advise the user to test its performance in by using the example dataset. 
+
+The example dataset corresponds to the chr22 Normal-Tumor pair samples from the in-silico genome used in Valentí et al, Nature Biotech. 2014. The files are in fastq format.
+
+
+Files included in the example dataset:
+
+Normal files, 5 different libraries, 80bps reads 500 insert size,  1st paired-end files:
+chr22_insilico_Normal_30x_3_1.fastq.gz
+chr22_insilico_Normal_30x_4_1.fastq.gz
+chr22_insilico_Normal_30x_5_1.fastq.gz
+chr22_insilico_Normal_30x_6_1.fastq.gz
+chr22_insilico_Normal_30x_7_1.fastq.gz
+
+Normal files, 30x cov in 5 different libraries, 80bps reads 500 insert size,  2on paired-end files:
+
+chr22_insilico_Normal_30x_3_2.fastq.gz
+chr22_insilico_Normal_30x_4_2.fastq.gz
+chr22_insilico_Normal_30x_5_2.fastq.gz
+chr22_insilico_Normal_30x_6_2.fastq.gz
+chr22_insilico_Normal_30x_7_2.fastq.gz
+
+Tumor files, 30x cov in 4 different libraries, 80bps reads 500 insert size,  1st paired-end files:
+chr22_insilico_Tumor_30x_8_1.fastq.gz
+chr22_insilico_Tumor_30x_9_1.fastq.gz
+chr22_insilico_Tumor_30x_10_1.fastq.gz
+chr22_insilico_Tumor_30x_11_1.fastq.gz
+
+Tumor files, 30x cov in 4 different libraries, 80bps reads 500 insert size,  2on paired-end files:
+chr22_insilico_Tumor_30x_8_2.fastq.gz
+chr22_insilico_Tumor_30x_9_2.fastq.gz
+chr22_insilico_Tumor_30x_10_2.fastq.gz
+chr22_insilico_Tumor_30x_11_2.fastq.gz
+
+
+To run SMuFin with this dataset, the user first needs to create text files containing the paths of all fastq filenames of both samples. Read sequences belonging to the same paired-end must be in separated files and in the same line. eg: *_1.fastq, *_2.fastq.
+
+For example:
+
+"normal_fastqs_1.txt"
+chr22_insilico_Normal_30x_3_1.fastq.gz
+chr22_insilico_Normal_30x_4_1.fastq.gz
+chr22_insilico_Normal_30x_5_1.fastq.gz
+chr22_insilico_Normal_30x_6_1.fastq.gz
+chr22_insilico_Normal_30x_7_1.fastq.gz
+
+"normal_fastqs_2.txt"
+chr22_insilico_Normal_30x_3_2.fastq.gz
+chr22_insilico_Normal_30x_4_2.fastq.gz
+chr22_insilico_Normal_30x_5_2.fastq.gz
+chr22_insilico_Normal_30x_6_2.fastq.gz
+chr22_insilico_Normal_30x_7_2.fastq.gz
+
+"tumor_fastqs_1.txt"
+chr22_insilico_Tumor_30x_8_1.fastq.gz
+chr22_insilico_Tumor_30x_9_1.fastq.gz
+chr22_insilico_Tumor_30x_10_1.fastq.gz
+chr22_insilico_Tumor_30x_11_1.fastq.gz
+
+"tumor_fastqs_2.txt"
+chr22_insilico_Tumor_30x_8_2.fastq.gz
+chr22_insilico_Tumor_30x_9_2.fastq.gz
+chr22_insilico_Tumor_30x_10_2.fastq.gz
+chr22_insilico_Tumor_30x_11_2.fastq.gz
+
+
+NOTE: Relative paths to files can be used if you run SMuFin in a path also relative to the datasets.
+
+The example can be run using the following command (using 16 nodes):
+
+mpirun --np 16 ./SMuFin_2.0.1_MPI_beta --ref ref_genome/hg19.fa --normal_fastq_1 normal_fastqs_1.txt --normal_fastq_2 normal_fastqs_2.txt --tumor_fastq_1 tumor_fastqs_1.txt --tumor_fastq_2 tumor_fastqs_2.txt --patient_id chr22_insilico --cpus_per_node 16
+
+NOTE: The previous command will run SMuFin with these default parameters: 
+
+--min_supp_reads 4: Minimum number of tumor supporting reads required for calling a variant.
+--tumor_cont_perc 0 : Expected percentage of tumor contamination in normal sample.
+
+SMuFin prints the results into three differents files:
+
+somatic_SNVs.chr22_insilico.txt:      for Single Nuleotide Variations.
+somatic_small_SVs.chr22_insilico.txt: for small SVs.
+somatic_large_SVs.chr22_insilico.txt: for breakpoints of large SVs.
+
+
+These 3 outputs refer to the three categories of somatic events: SNV, small SVs (deletions, insertions, inversions) and large SVs (breakpoints). “Small" and “Large” correspond to variants smaller or larger than the read size.
+
+
+OUTPUT ANALYSIS:
+
+SMuFin outputs 3 categories of somatic events: SNV, small SVs(deletions, insertions, inversions) and big SVs Breakpoints. "Small" events are smaller than the read size.
+
+Each mutation type is printed in a row following these formats: 
+
+SNV row format:
+
+mut_id        SNV    chr    ref_position    control_basepair    tumor_basepair    
+
+mut_id:            Integer identifying the mutation inside the output file.
+SNV:               Somatic call definition: Single Nucleotide Variation.
+chr:               Reference chromosome id.
+ref_position:      Reference 1-based SNV coordinate.
+control_basepair:  Nucleotide found in normal genome.
+tumor_basepair:    Alternative nucleotide found in tumor genome.
+
+Small Deletion row format:
+
+mut_id        DEL    chr_id  ref_position    length
+
+mut_id:            Integer identifying the mutation inside the output file.
+DEL:               Somatic call: Small deletion event.
+chr:               Reference chromosome id.
+ref_position:      Reference 1-based deletion coordinate. 
+length:            Deletion length.
+
+Small Insertion row format:
+
+mut_id        INS    chr_id  ref_position    length    sequence
+
+mut_id:            Integer identifying the mutation inside the output file.
+INS:               Somatic call definition: Small insertion event.
+chr:               Reference chromosome id.
+ref_position:      Reference 1-based insertion coordinate.
+length:            Insertion length.
+inserted_sequence: Sequence inserted.
+
+Small Inversion row format:
+
+mut_id        INV    chr_id  ref_position    length    sequence
+
+mut_id:            Integer identifying the mutation inside the output file.
+INV:               Somatic call definition: Small inversion event.
+chr:               Reference chromosome id.
+ref_position:      Reference 1-based inversion coordinate. 
+length:            Investion length.
+
+Breakpoint row format:
+
+mut_id        BKP    left_chr_id    left_ref_position    right_chr_id    right_ref_position    local(left_strand left_ini..left_end, right_strand right_ini..right_end)    extension_sequence
+
+
+mut_id:               Integer identifying the mutation inside the output file.
+BKP:                  Somatic call definition: Big SV breakpoint definition.
+left_chr_id:          Reference chr of sequence before break event.
+left_ref_position:    Reference 1-based coordinate of the breakpoint in "left_chr_id".
+right_chr_id:         Reference chr of sequence after break event.
+right_ref_position:   Reference 1-based coordinate of the breakpoint in "right_chr_id".
+left_strand:          Mapping strand of the left part of the "extension_sequence".
+local_left_ini:       Initial local mapping offset of the left part of "extension_sequence".
+local_left_end:       Final local mapping offset of the left part of  "extension_sequence".
+right_strand:         Mapping strand of the right part of the "extension_sequence".
+local_right_ini:      Initial local mapping offset of the right part of "extension_sequence".
+local_right_end:      Final local mapping offset of the right part of  "extension_sequence".
+extension_sequence:   The genomic sequence extension around each breakpoint. +-100bps.
+
+Example of a large SV Breakpoint (in this case, an interchromosomal translocation):
+
+
+1 BKP        3    2353687    17    25345233    local(+0..84,+85..150) 0.....ACATTCACTTGGTTGTAACTGCTTACACTGTGACACTGTTGGGAGGAGCACT......150 
+
+...............................................84     85......................................................150
+                                                |     |
+........................ACATTCACTTGGTTGTAACTGCTTA<BKP>CACTGTGACACTGTTGGGAGGAGCACT.............................
+                                                |     |
+                                  +chr3:2,353,687    +chr17:25,345,233
+
+
+

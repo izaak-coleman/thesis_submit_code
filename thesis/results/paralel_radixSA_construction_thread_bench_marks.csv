@@ -1,0 +1,37 @@
+// parallelRadixSACostruction threading data
+
+// 1 thr
+1,8, parallelGenRadixSA(), 183
+1,16,parallelGenRadixSA(), 390
+1,32,parallelGenRadixSA(), 827
+1,64,parallelGenRadixSA(), 1757
+1,128, parallelGenRadixSA(), 3987
+1,256, parallelGenRadixSA(), 9181
+1,512, parallelGenRadixSA(), 21361
+
+// 2 thr
+2, 8, parallelGenRadixSA(), 134
+2, 16, generateBranchPointGroups(), 217
+2, 32, parallelGenRadixSA(), 665
+2, 64, parallelGenRadixSA(), 1396
+2, 128, parallelGenRadixSA(), 2682
+2, 256, parallelGenRadixSA(), 6750
+2, 512, parallelGenRadixSA(), 15139
+
+// 4thr
+4,8, parallelGenRadixSA(), 115
+4,16,parallelGenRadixSA(), 247
+4,32, parallelGenRadixSA(), 553
+4,64, parallelGenRadixSA(), 999
+4,128, parallelGenRadixSA(), 2161
+4,256, parallelGenRadixSA(), 4784
+4,512, parallelGenRadixSA(), 10733
+
+// 8thr
+8,8, parallelGenRadixSA(), 113
+8,16, parallelGenRadixSA(), 250
+8,32, parallelGenRadixSA(), 467
+8,64, generateBranchPointGroups(), 1528
+8,128, parallelGenRadixSA(), 1933
+8,256, parallelGenRadixSA(), 4205
+8,521, parallelGenRadixSA(), 9300

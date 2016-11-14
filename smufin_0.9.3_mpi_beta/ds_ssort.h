@@ -1,0 +1,2 @@
+void ds_ssort(unsigned char *t, int *sa, int n);
+int init_ds_ssort(int adist, int bs_ratio);
